@@ -1,13 +1,12 @@
 import path from "path";
 import express, { Express, NextFunction, Request, response, Response } from "express";
 // application imports
-import { serverInfo } from "./serverInfo";
+import { serverInfo } from "./ServerInfo";
 import * as IMAP from "./IMAP";
 import * as SMTP from "./SMTP";
 import * as Contacts from "./Contacts";
 import { IContact } from "./Contacts"
-import { send } from "node:process";
-import SMTPConnection from "nodemailer/lib/smtp-connection";
+
 
 const app: Express = express();
 
