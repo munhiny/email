@@ -22,5 +22,6 @@ export interface IServerInfo {
 
 export let serverInfo: IServerInfo;
 
+// TODO: console log this 
 const rawInfo: string = fs.readFileSync(path.join(__dirname, "../serverInfo.json"));
 serverInfo = JSON.parse(rawInfo)
