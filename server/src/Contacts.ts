@@ -1,5 +1,3 @@
-import Nedb from "nedb";
-import { resolveHostname } from "nodemailer/lib/shared";
 import * as path from "path";
 const Datastore = require("nedb");
 
@@ -13,7 +11,8 @@ export class Worker {
     private db: Nedb;
     constructor() {
         this.db = new Datastore({
-            filename: path.join(__dirname, "contacts.db")
+            filename: path.join(__dirname, "contacts.db"),
+            autoload: true
         })
     }
 
@@ -32,6 +31,20 @@ export class Worker {
         })
     }
 
+    public listContact(id:string): Promise<IContact> {
+        return new Promise((resolve, reject) => {
+            this.db.findOne({_id : id}, (error: Error | null, doc:IContact) => {
+                if(error) {
+                    reject(error)
+                } else {
+                    console.log('doc: ', doc)
+                    resolve(doc)
+                }
+
+            })
+        })
+    }
+
     public addContact(contact: IContact): Promise<IContact> {
         return new Promise((resolve, reject) => {
             this.db.insert(contact,
@@ -46,14 +59,29 @@ export class Worker {
         })
     }
 
-    public deleteContact(id: string): Promise<string> {
+    public updateContact(id: string, contact: IContact): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.db.update({_id: id},{$set:contact}, {}, (error: Error | null, numUpdated:number) => {
+                if(error) {
+                    reject(error)
+                } else {
+                    resolve("")
+                }
+            })
+        })
+    }
+
+    public deleteContact(id: string): Promise<number |string> {
         return new Promise((resolve, reject) => {
             this.db.remove({_id: id}, { }, 
-                (error:Error | null, numRemoved: number) => {
+                (error:Error | null, numRemoved: number | string) => {
                     if (error) {
                         reject(error)
                     } else {
-                        resolve("")
+                        if (numRemoved === 0) {
+                            resolve("No member Found")
+                        }
+                        resolve(numRemoved)
                     }
                 })
         })

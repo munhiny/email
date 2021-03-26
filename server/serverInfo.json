@@ -1,16 +1,16 @@
 {
     "smtp" : {
-        "host" :  "mail.mydomain.com", 
-        "port" : 999,
+        "host" :  "smtp.outlook.com", 
+        "port" : 587,
         "auth" : { 
-            "user" : "user@domain.com", 
-            "pass" : "xxx"}
+            "user" : "people_of_the_corn@hotmail.com", 
+            "pass" : "$tupidY0ung10"}
     },
     "imap" : {
-        "host" : "mail.mydomain.com", 
-        "port": 999,
+        "host" : "imap.outlook.com", 
+        "port": 993,
         "auth" : { 
-            "user" : "user@domain.com", 
-            "pass" : "xxx"} 
+            "user" : "people_of_the_corn@hotmail.com", 
+            "pass" : "$tupidY0ung10"} 
     }
 }

@@ -1,6 +1,6 @@
 const ImapClient = require ("emailjs-imap-client");
 import { ParsedMail, simpleParser } from "mailparser";
-import { IServerInfo } from "./ServerInfo";
+import { IServerInfo, serverInfo } from "./ServerInfo";
 
 export interface ICallOptions {
     mailbox: string,
@@ -20,11 +20,14 @@ export interface IMailbox {
     path: string
 }
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+
 
 export class Worker {
     private static serverInfo: IServerInfo;
     constructor(inServerInfo: IServerInfo) {
+        console.log(inServerInfo)
         Worker.serverInfo = inServerInfo;
     }
     private async conntectToServer(): Promise<any> {
@@ -66,7 +69,7 @@ export class Worker {
     public async listMessages(callOptions: ICallOptions):
     Promise<IMessage[]> {
         const client: any = await this.conntectToServer();
-        const mailbox: any = await client.selectMailbox(callOptions)
+        const mailbox: any = await client.selectMailbox(callOptions.mailbox)
         if (mailbox.exists === 0) {
             await client.close();
             return [];
@@ -74,12 +77,14 @@ export class Worker {
         const messages: any[] = await client.listMessages(
             callOptions.mailbox, "1:*", ["uid", "envelope"]
         )
+
         await client.close()
         const finalMessages: IMessage[] = [];
         messages.forEach((value: any) => {
+            console.log(value.envelope.date)
             finalMessages.push({
                 id : value.uid,
-                date: value.evelope.date,
+                date: value.envelope.date,
                 from: value.envelope.from[0].address,
                 subject: value.envelope.subject
             })
@@ -94,7 +99,10 @@ export class Worker {
             callOptions.mailbox, callOptions.id,
             ["body[]"], { byUid: true }
         )
+        console.log(messages[0]["body[]"])
         const parsed: ParsedMail = await simpleParser(messages[0]["body[]"])
+        console.log("-------------")
+        console.log(parsed.text)
         await client.close();
         return parsed.text;
     }
