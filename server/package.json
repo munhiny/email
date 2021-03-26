@@ -2,10 +2,10 @@
     "name": "server",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "main.ts",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "compile": "npx tsx && node ./dist/main.js",
+        "compile": "npx tsc && node ./dist/main.js",
         "dev": "nodemon -e ts --exec \"npm run compile\""
     },
     "author": "",
