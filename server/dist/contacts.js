@@ -50,7 +50,6 @@ var Worker = /** @class */ (function () {
                     reject(error);
                 }
                 else {
-                    console.log('doc: ', doc);
                     resolve(doc);
                 }
             });

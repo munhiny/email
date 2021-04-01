@@ -1,5 +1,7 @@
 import path from "path";
 import express, { Express, NextFunction, Request, response, Response } from "express";
+import cors from "cors"
+import bodyParser from 'body-parser'
 // application imports
 import { serverInfo } from "./ServerInfo";
 import * as IMAP from "./IMAP";
@@ -16,15 +18,23 @@ const app: Express = express();
 // middleware to parse incoming request json objects
 app.use(express.json())
 
+app.use(cors({
+    origin: "http://localhost:3000"
+}))
+
+app.use(bodyParser.json())
+
 // to serve static site held in the client dist folder
 // app.use('/', express.static(path.join(__dirname, "../../client/dist")))
 
-app.use((request: Request, response: Response, next: NextFunction) => {
-    response.header("Access-Control-Allow-Origin", "*")
-    response.header("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
+// app.use((request: Request, response: Response, next: NextFunction) => {
+//     response.header("Access-Control-Allow-Origin", "*")
+//     response.header("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
+//     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+//     next()
+// })
+
+// app.use(cors())
 // REST Endpoint: List Mailboxes
 
 app.get("/", (request:Request, response: Response) => {

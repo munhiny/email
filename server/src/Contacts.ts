@@ -37,7 +37,6 @@ export class Worker {
                 if(error) {
                     reject(error)
                 } else {
-                    console.log('doc: ', doc)
                     resolve(doc)
                 }
 
