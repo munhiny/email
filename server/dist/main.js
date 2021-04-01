@@ -59,6 +59,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var cors_1 = __importDefault(require("cors"));
+var body_parser_1 = __importDefault(require("body-parser"));
 // application imports
 var ServerInfo_1 = require("./ServerInfo");
 var IMAP = __importStar(require("./IMAP"));
@@ -67,14 +69,19 @@ var Contacts = __importStar(require("./Contacts"));
 var app = express_1.default();
 // middleware to parse incoming request json objects
 app.use(express_1.default.json());
+app.use(cors_1.default({
+    origin: "http://localhost:3000"
+}));
+app.use(body_parser_1.default.json());
 // to serve static site held in the client dist folder
 // app.use('/', express.static(path.join(__dirname, "../../client/dist")))
-app.use(function (request, response, next) {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use((request: Request, response: Response, next: NextFunction) => {
+//     response.header("Access-Control-Allow-Origin", "*")
+//     response.header("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
+//     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+//     next()
+// })
+// app.use(cors())
 // REST Endpoint: List Mailboxes
 app.get("/", function (request, response) {
     response.status(200).send("hello world");
